@@ -6,7 +6,12 @@ func main() {
 
 	var a, b, c, d, e int
 
-	a, b, c, d, e = 55, 4, 75, 3, 15
+	fmt.Println("Введите 5 чисел: ")
+	fmt.Scanln(&a)
+	fmt.Scanln(&b)
+	fmt.Scanln(&c)
+	fmt.Scanln(&d)
+	fmt.Scanln(&e)
 
 	for i := 0; i < 5; i++ {
 
