@@ -4,7 +4,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strings"
 	"unicode/utf8"
 )
 
@@ -13,7 +16,9 @@ func main() {
 	var str string
 
 	fmt.Println("Введите строку: ")
-	fmt.Scanln(&str)
+	str, _ = bufio.NewReader(os.Stdin).ReadString('\n')
+
+	str = strings.TrimRight(str, "\r\n")
 
 	res := utf8.RuneCountInString(str)
 
