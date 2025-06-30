@@ -6,25 +6,30 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
+	"unicode"
 )
 
-var capitalizeWords(s string) string {
-w := strings.Fields(s)
-for i, b := range w {
-	if len(b) == 0 {
-	continue
-}
-}
+func capitalizeWords(s string) string {
+
+	str := strings.ToLower(s)
+	words := strings.Fields(str)
+
+	for i, word := range words {
+		runes := []rune(word)
+		if len(runes) > 0 {
+
+			runes[0] = unicode.ToUpper(runes[0])
+			words[i] = string(runes)
+		}
+	}
+
+	return strings.Join(words, " ")
 }
 
 func main() {
-
-	var str string
-
-
-	fmt.Println("Введите строку: ")
-	str, _ = bufio.NewReader(os.Stdin).ReadString('\n')
-	fmt.Println(CapitalizeWords("str"))
-
+	var stroca string
+	stroca, _ = bufio.NewReader(os.Stdin).ReadString('\n')
+	fmt.Println(capitalizeWords(stroca))
 
 }
