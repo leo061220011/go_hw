@@ -28,7 +28,9 @@ func capitalizeWords(s string) string {
 }
 
 func main() {
+
 	var stroca string
+	fmt.Println("Введите строку: ")
 	stroca, _ = bufio.NewReader(os.Stdin).ReadString('\n')
 	fmt.Println(capitalizeWords(stroca))
 
