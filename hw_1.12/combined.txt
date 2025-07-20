@@ -1,0 +1,8 @@
+Файл 1- главный
+Просто файл №2
+Файл 3 (с подвохом)
+подвох
+просто 4 ))
+ССЫЛКА
+https://do.bmstu.ru/napravleniya-obucheniya/programmirovanie-i-it/fullstack-razrabotchik-na-go-1169/
+()
