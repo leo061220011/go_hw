@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Учебный центр на Ломоносовском</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #333;
+    }
+
+    /* Шапка */
+    header {
+      background-color: #c74d35;
+      color: white;
+      text-align: center;
+      padding: 0;
+      position: relative;
+    }
+
+    header img.logo {
+      width: 398px; /* уменьшили на 20% */
+      display: block;
+      margin: 0 auto 5px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 44px;
+      font-weight: bold;
+      padding-bottom: 10px;
+    }
+
+    /* Белая полоса */
+    .separator {
+      height: 5px;
+      background: white;
+      margin: 0;
+    }
+
+    /* Зеленая полоса */
+    .sub-header {
+      background: #00796b;
+      color: white;
+      font-size: 34px;
+      font-weight: bold;
+      padding: 10px 0; /* уменьшили на 20% */
+      text-align: center;
+    }
+
+    /* Общая секция с фоном от зелёной полосы */
+    .main-section {
+      background: url("https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_66cb07e4b8c9e43ea2835a2d_66cb07ee0ebe8439f6c7419a/scale_1200") no-repeat center top;
+      background-size: cover;
+      padding-bottom: 40px;
+    }
+
+    /* Меню */
+    nav {
+      background: transparent;
+      border-bottom: none;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    nav ul li {
+      position: relative;
+    }
+
+    nav ul li a {
+      display: block;
+      padding: 14px 22px;
+      color: #00796b; /* зелёный как плашка */
+      text-decoration: none;
+      font-size: 23px; /* увеличено на 10% */
+      font-weight: 900; /* жирнее */
+      transition: color 0.3s;
+      border-radius: 4px;
+    }
+
+    nav ul li a:hover {
+      color: #004d40; /* чуть темнее при наведении */
+    }
+
+    /* Иконка домика */
+    .home-icon::before {
+      content: "🏠";
+      margin-right: 6px;
+    }
+
+    /* Подменю */
+    nav ul li ul {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: rgba(255,255,255,0.95);
+      flex-direction: column;
+      min-width: 160px;
+      z-index: 1000;
+
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      border-radius: 4px;
+    }
+
+    nav ul li:hover ul {
+      opacity: 1;
+      max-height: 300px;
+    }
+
+    nav ul li ul li a {
+      padding: 12px 18px;
+      font-size: 23px; /* увеличено на 10% */
+      font-weight: 900; /* жирнее */
+      color: #00796b; /* тот же зелёный */
+    }
+
+    nav ul li ul li a:hover {
+      color: #004d40;
+    }
+
+    /* Основной блок */
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      text-align: center; /* выравнивание по центру */
+      color: #222;
+      text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+    }
+
+    .highlight {
+      color: #c74d35;
+      font-size: 25px; /* было 22px → +15% */
+      font-weight: 900; /* жирнее */
+      margin-bottom: 20px;
+    }
+
+    ul.services {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: inline-block;
+      text-align: left;
+    }
+
+    ul.services li {
+      margin: 15px 0;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    ul.services li::before {
+      content: "■";
+      color: #c74d35;
+      margin-right: 8px;
+      font-size: 20px;
+    }
+
+    /* Кнопка Забронировать */
+    .button-box {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .btn-book {
+      display: inline-block;
+      padding: 14px 28px;
+      background: #c74d35;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn-book:hover {
+      background: #8e2d1d;
+      transform: scale(1.05);
+    }
+
+    /* Подвал */
+    footer {
+      padding: 20px;
+      text-align: center;
+      font-size: 16px;
+      color: #222;
+      text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+    }
+
+    footer p {
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="/static/logo.png" alt="Логотип" class="logo">
+    <h1>УЧЕБНЫЙ ЦЕНТР</h1>
+    <div class="separator"></div>
+  </header>
+
+  <div class="sub-header">
+    НА ЛОМОНОСОВСКОМ
+  </div>
+
+  <div class="main-section">
+    <!-- Меню -->
+    <nav>
+      <ul>
+        <li><a href="/" class="home-icon">Главная</a></li>
+        <li>
+          <a href="#">Предметы ▼</a>
+          <ul>
+            <li><a href="/math">Математика</a></li>
+            <li><a href="/english">Английский язык</a></li>
+          </ul>
+        </li>
+        <li><a href="/about">О нас</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <p class="highlight">Ошибка 404 — страница не найдена</p>
+      <ul class="services">
+        <li><strong>Вы ввели неверный адрес</strong></li>
+        <li><a href="/" class="btn-book">Вернуться на главную</a></li>
+      </ul>
+    </div>
+
+    <footer>
+      <p>T: +7 (985) 635-52-80</p>
+      <p>E: megapocherk@mail.ru</p>
+      <p>Москва, Ломоносовский пр-т, д.5</p>
+    </footer>
+  </div>
+
+</body>
+</html>

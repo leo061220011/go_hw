@@ -1,0 +1,271 @@
+/* CSS */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #fff;
+  color: #333;
+}
+
+ /* Шапка */
+    header {
+      background-color: #c74d35;
+      color: white;
+      text-align: center;
+      padding: 0;
+    }
+
+    header img.logo {
+      width: 300px;
+      display: block;
+      margin: 0 auto 5px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 36px;
+      font-weight: bold;
+      padding-bottom: 6px;
+    }
+
+    .separator {
+      height: 5px;
+      background: white;
+      margin: 0;
+    }
+
+    .sub-header {
+      background: #00796b;
+      color: white;
+      font-size: 26px;
+      font-weight: bold;
+      padding: 6px 0;
+      text-align: center;
+    }
+
+
+/* Общая секция с фоном */
+.main-section {
+  background: url("https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_66cb07e4b8c9e43ea2835a2d_66cb07ee0ebe8439f6c7419a/scale_1200")
+              no-repeat center top fixed;
+  background-size: cover;
+  padding-bottom: 40px;
+}
+
+ /* Меню */
+    nav {
+      background: transparent;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    nav ul li {
+      position: relative;
+    }
+
+    nav ul li a {
+      display: block;
+      padding: 12px 20px;
+      color: #00796b;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 900;
+      transition: color 0.3s;
+      border-radius: 4px;
+    }
+
+    nav ul li a:hover {
+      color: #004d40;
+    }
+
+    .home-icon::before {
+      content: "🏠";
+      margin-right: 6px;
+    }
+
+    nav ul li ul {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: rgba(255,255,255,0.95);
+      flex-direction: column;
+      min-width: 160px;
+      z-index: 1000;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      border-radius: 4px;
+    }
+
+    nav ul li:hover ul {
+      opacity: 1;
+      max-height: 300px;
+    }
+
+    nav ul li ul li a {
+      padding: 12px 18px;
+      font-size: 18px;
+      font-weight: 900;
+      color: #00796b;
+    }
+
+    nav ul li ul li a:hover {
+      color: #004d40;
+    }
+    h2 {
+      color: #c74d35;
+      font-size: 22px;
+      margin-top: 20px;
+    }
+
+    .contact-info p {
+      margin: 8px 0;
+    }
+
+/* Форма */
+    form {
+      margin-top: 20px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #bbb;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 15px;
+      background: #c74d35;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background: #8e2d1d;
+      transform: scale(1.05);
+    }
+    .map {
+      margin-top: 30px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+/* Контент */
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  text-align: justify;
+  color: #222;
+  text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+  font-size: 18px;
+  line-height: 1.7;
+  background: rgba(255,255,255,0.92);
+  border-radius: 12px;
+}
+
+.intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.intro img {
+  max-width: 220px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.intro p {
+  text-align: justify;
+}
+
+.highlight {
+  color: #c74d35;
+  font-size: 25px;
+  font-weight: 900;
+  margin-bottom: 20px;
+}
+
+ul.services {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  text-align: left;
+}
+
+ul.services li {
+  margin: 15px 0;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+ul.services li::before {
+  content: "■";
+  color: #c74d35;
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+/* Кнопка Забронировать */
+.button-box {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.btn-book {
+  display: inline-block;
+  padding: 14px 28px;
+  background: #c74d35;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.btn-book:hover {
+  background: #8e2d1d;
+  transform: scale(1.05);
+}
+
+/* Подвал */
+footer {
+  padding: 20px;
+  text-align: center;
+  font-size: 16px;
+  color: #222;
+  text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+}
+
+footer p {
+  margin: 8px 0;
+}

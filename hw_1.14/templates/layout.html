@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{block "title" .}}Учебный центр{{end}}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <img src="/static/logo.png" alt="Логотип" class="logo">
+    <h1>УЧЕБНЫЙ ЦЕНТР</h1>
+    <div class="separator"></div>
+  </header>
+
+  <div class="sub-header">НА ЛОМОНОСОВСКОМ</div>
+
+  <div class="main-section">
+    <nav>
+      <ul>
+        <li><a href="/" class="home-icon">Главная</a></li>
+        <li>
+          <a href="#">Предметы ▼</a>
+          <ul>
+            <li><a href="/math">Математика</a></li>
+            <li><a href="/english">Английский язык</a></li>
+          </ul>
+        </li>
+        <li><a href="/about">О нас</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      {{block "content" .}}{{end}}
+    </div>
+
+    <footer>
+      <p>T: +7 (985) 635-52-80</p>
+      <p>E: megapocherk@mail.ru</p>
+      <p>Москва, Ломоносовский пр-т, д.5</p>
+    </footer>
+  </div>
+</body>
+</html>
