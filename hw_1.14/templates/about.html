@@ -14,7 +14,12 @@
 </div>
 
 <h2>Форма обратной связи</h2>
-<form>
+
+{{if .Success}}
+  <p style="color: green; font-weight: bold;">Сообщение успешно отправлено!</p>
+{{end}}
+
+<form method="POST" action="/feedback">
   <label for="name">Ваше имя *</label>
   <input type="text" id="name" name="name" required>
 
@@ -36,6 +41,7 @@
 
   <button type="submit">Отправить сообщение</button>
 </form>
+
 
 <h2>Адрес</h2>
 <p>119261, г. Москва, пр-т. Ломоносовский, д. 5</p>

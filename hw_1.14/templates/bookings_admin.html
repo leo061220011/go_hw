@@ -1,0 +1,39 @@
+{{define "title"}}Заявки{{end}}
+
+{{define "content"}}
+<h2>Список заявок</h2>
+
+{{if not .}}
+  <p>Пока нет заявок.</p>
+{{else}}
+  <table border="1" cellpadding="5" cellspacing="0">
+    <tr>
+      <th>ID</th>
+      <th>Имя</th>
+      <th>Email</th>
+      <th>Телефон</th>
+      <th>Тема</th>
+      <th>Дата/время</th>
+      <th>Сообщение</th>
+      <th>Действие</th>
+    </tr>
+    {{range .}}
+    <tr>
+      <td>{{.ID}}</td>
+      <td>{{.Name}}</td>
+      <td>{{.Email}}</td>
+      <td>{{.Phone}}</td>
+      <td>{{.Topic}}</td>
+      <td>{{.DateTime}}</td>
+      <td>{{.Message}}</td>
+      <td>
+        <form action="/admin/bookings/delete" method="POST" style="display:inline;">
+          <input type="hidden" name="id" value="{{.ID}}">
+          <button type="submit" onclick="return confirm('Удалить заявку?')">Удалить</button>
+        </form>
+      </td>
+    </tr>
+    {{end}}
+  </table>
+{{end}}
+{{end}}

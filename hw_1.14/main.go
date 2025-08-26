@@ -21,6 +21,29 @@ type ContactInfo struct {
 	GraficBudni    string
 	GraficSaturday string
 	GraficSunday   string
+	Success        bool
+}
+
+// структура для сообщений обратной связи
+type Feedback struct {
+	ID      int
+	Name    string
+	Email   string
+	Phone   string
+	Topic   string
+	Message string
+}
+
+// структура для бронирований
+type Booking struct {
+	ID       int
+	Name     string
+	Email    string
+	Phone    string
+	Topic    string
+	DateTime string
+	Message  string
+	Success  bool
 }
 
 // загрузка шаблонов
@@ -44,22 +67,41 @@ func main() {
 	}
 	defer db.Close()
 
-	// Создать таблицы, если  ещё нет
-	createTable := `
-	CREATE TABLE IF NOT EXISTS contacts (
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		phone TEXT,
-		email TEXT,
-		GraficBudni TEXT,
-		GraficSaturday TEXT,
-		GraficSunday TEXT
-	);
-	`
-	if _, err := db.Exec(createTable); err != nil {
-		log.Fatal("Ошибка при создании таблицы:", err)
+	// Создать таблицы, если ещё нет
+	createTables := []string{
+		`CREATE TABLE IF NOT EXISTS contacts (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			phone TEXT,
+			email TEXT,
+			GraficBudni TEXT,
+			GraficSaturday TEXT,
+			GraficSunday TEXT
+		);`,
+		`CREATE TABLE IF NOT EXISTS feedback (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			name TEXT,
+			email TEXT,
+			phone TEXT,
+			topic TEXT,
+			message TEXT
+		);`,
+		`CREATE TABLE IF NOT EXISTS bookings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    email TEXT,
+    phone TEXT,
+    topic TEXT,
+    datetime TEXT,
+    message TEXT
+);`,
+	}
+	for _, query := range createTables {
+		if _, err := db.Exec(query); err != nil {
+			log.Fatal("Ошибка при создании таблицы:", err)
+		}
 	}
 
-	// Если таблица пустая – вставим данные
+	// Если таблица contacts пустая – вставим данные
 	_, err = db.Exec(`INSERT INTO contacts (phone, email, GraficBudni, GraficSaturday, GraficSunday)
 		SELECT '+7 (903) 796-04-56', 'megapocherk@mail.ru', '9:00 - 20:00', '10:00 - 16:00', 'выходной'
 		WHERE NOT EXISTS (SELECT 1 FROM contacts);`)
@@ -69,9 +111,12 @@ func main() {
 
 	// Шаблоны
 	pages["index.html"] = mustPage("index.html")
+	pages["checkout.html"] = mustPage("checkout.html")
 	pages["math.html"] = mustPage("math.html")
 	pages["english.html"] = mustPage("english.html")
 	pages["about.html"] = mustPage("about.html")
+	pages["feedback_admin.html"] = mustPage("feedback_admin.html")
+	pages["bookings_admin.html"] = mustPage("bookings_admin.html")
 
 	mux := http.NewServeMux()
 
@@ -82,6 +127,44 @@ func main() {
 			return
 		}
 		render(w, "index.html", nil)
+	})
+
+	// checkout
+	mux.HandleFunc("/checkout", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			render(w, "checkout.html", nil)
+			return
+		}
+
+		if r.Method == http.MethodPost {
+			name := r.FormValue("name")
+			email := r.FormValue("email")
+			phone := r.FormValue("phone")
+			topic := r.FormValue("topic")
+			datetime := r.FormValue("event-datetime")
+			message := r.FormValue("message")
+
+			if name == "" || email == "" || message == "" {
+				http.Error(w, "Заполните обязательные поля", http.StatusBadRequest)
+				return
+			}
+
+			_, err := db.Exec(
+				"INSERT INTO bookings (name, email, phone, topic, datetime, message) VALUES (?, ?, ?, ?, ?, ?)",
+				name, email, phone, topic, datetime, message,
+			)
+			if err != nil {
+				http.Error(w, "Ошибка при сохранении", http.StatusInternalServerError)
+				return
+			}
+
+			// Возвращаем ту же форму, но с Success
+			booking := Booking{Success: true}
+			render(w, "checkout.html", booking)
+			return
+		}
+
+		http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)
 	})
 
 	// Единый handler для предметов
@@ -111,6 +194,161 @@ func main() {
 			return
 		}
 		render(w, "about.html", info)
+	})
+
+	// // Обработчик формы обратной связи
+	// mux.HandleFunc("/feedback", func(w http.ResponseWriter, r *http.Request) {
+	// 	if r.Method != http.MethodPost {
+	// 		http.Redirect(w, r, "/about", http.StatusSeeOther)
+	// 		return
+	// 	}
+
+	// 	if err := r.ParseForm(); err != nil {
+	// 		http.Error(w, "Ошибка обработки формы", http.StatusBadRequest)
+	// 		return
+	// 	}
+
+	// 	name := r.FormValue("name")
+	// 	email := r.FormValue("email")
+	// 	phone := r.FormValue("phone")
+	// 	topic := r.FormValue("topic")
+	// 	message := r.FormValue("message")
+
+	// 	_, err := db.Exec(`INSERT INTO feedback (name, email, phone, topic, message) VALUES (?, ?, ?, ?, ?)`,
+	// 		name, email, phone, topic, message)
+	// 	if err != nil {
+	// 		http.Error(w, "Ошибка записи в базу", http.StatusInternalServerError)
+	// 		return
+	// 	}
+
+	// 	log.Printf("Новое сообщение от %s <%s>: %s", name, email, message)
+
+	// 	http.Redirect(w, r, "/about", http.StatusSeeOther)
+	// })
+	mux.HandleFunc("/feedback", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)
+			return
+		}
+
+		name := r.FormValue("name")
+		email := r.FormValue("email")
+		phone := r.FormValue("phone")
+		topic := r.FormValue("topic")
+		message := r.FormValue("message")
+
+		if name == "" || email == "" || message == "" {
+			http.Error(w, "Заполните обязательные поля", http.StatusBadRequest)
+			return
+		}
+
+		_, err := db.Exec(
+			"INSERT INTO feedback (name, email, phone, topic, message) VALUES (?, ?, ?, ?, ?)",
+			name, email, phone, topic, message,
+		)
+		if err != nil {
+			http.Error(w, "Ошибка при сохранении", http.StatusInternalServerError)
+			return
+		}
+
+		// Загружаем контакты снова, чтобы отрисовать about.html
+		var info ContactInfo
+		err = db.QueryRow("SELECT phone, email, GraficBudni, GraficSaturday, GraficSunday FROM contacts LIMIT 1").
+			Scan(&info.Phone, &info.Email, &info.GraficBudni, &info.GraficSaturday, &info.GraficSunday)
+		if err != nil {
+			http.Error(w, "Ошибка загрузки контактов", http.StatusInternalServerError)
+			return
+		}
+
+		info.Success = true // <-- указываем, что форма успешно отправлена
+
+		render(w, "about.html", info)
+	})
+
+	// Админка: список сообщений
+	mux.HandleFunc("/admin/feedback", func(w http.ResponseWriter, r *http.Request) {
+		rows, err := db.Query("SELECT id, name, email, phone, topic, message FROM feedback ORDER BY id DESC")
+		if err != nil {
+			http.Error(w, "Ошибка загрузки сообщений", http.StatusInternalServerError)
+			return
+		}
+		defer rows.Close()
+
+		var messages []Feedback
+		for rows.Next() {
+			var f Feedback
+			if err := rows.Scan(&f.ID, &f.Name, &f.Email, &f.Phone, &f.Topic, &f.Message); err != nil {
+				http.Error(w, "Ошибка чтения данных", http.StatusInternalServerError)
+				return
+			}
+			messages = append(messages, f)
+		}
+
+		render(w, "feedback_admin.html", messages)
+	})
+	// Админка: список заявок
+	mux.HandleFunc("/admin/bookings", func(w http.ResponseWriter, r *http.Request) {
+		rows, err := db.Query("SELECT id, name, email, phone, topic, datetime, message FROM bookings ORDER BY id DESC")
+		if err != nil {
+			http.Error(w, "Ошибка загрузки заявок", http.StatusInternalServerError)
+			return
+		}
+		defer rows.Close()
+
+		var bookings []Booking
+		for rows.Next() {
+			var b Booking
+			if err := rows.Scan(&b.ID, &b.Name, &b.Email, &b.Phone, &b.Topic, &b.DateTime, &b.Message); err != nil {
+				http.Error(w, "Ошибка чтения данных", http.StatusInternalServerError)
+				return
+			}
+			bookings = append(bookings, b)
+		}
+
+		render(w, "bookings_admin.html", bookings)
+	})
+
+	// Удаление сообщения
+	mux.HandleFunc("/admin/feedback/delete", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)
+			return
+		}
+
+		id := r.FormValue("id") // <-- читаем из формы, а не из query
+		if id == "" {
+			http.Error(w, "Не указан id", http.StatusBadRequest)
+			return
+		}
+
+		_, err := db.Exec("DELETE FROM feedback WHERE id = ?", id)
+		if err != nil {
+			http.Error(w, "Ошибка удаления", http.StatusInternalServerError)
+			return
+		}
+
+		http.Redirect(w, r, "/admin/feedback", http.StatusSeeOther)
+	})
+	// Удаление заявки
+	mux.HandleFunc("/admin/bookings/delete", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			http.Error(w, "Метод не поддерживается", http.StatusMethodNotAllowed)
+			return
+		}
+
+		id := r.FormValue("id")
+		if id == "" {
+			http.Error(w, "Не указан id", http.StatusBadRequest)
+			return
+		}
+
+		_, err := db.Exec("DELETE FROM bookings WHERE id = ?", id)
+		if err != nil {
+			http.Error(w, "Ошибка удаления", http.StatusInternalServerError)
+			return
+		}
+
+		http.Redirect(w, r, "/admin/bookings", http.StatusSeeOther)
 	})
 
 	// Статика

@@ -1,0 +1,35 @@
+{{define "title"}}Form{{end}}
+
+{{define "content"}}
+<h2>Запись на занятие</h2>
+
+{{if .Success}}
+  <p style="color: green; font-weight: bold;">Заявка успешно отправлена!</p>
+{{end}}
+
+<form action="/checkout" method="POST">
+  <label for="name">Ваше имя *</label>
+  <input type="text" id="name" name="name" required>
+
+  <label for="email">Email *</label>
+  <input type="email" id="email" name="email" required>
+
+  <label for="phone">Телефон</label>
+  <input type="tel" id="phone" name="phone">
+
+  <label for="topic">Тема сообщения</label>
+  <select id="topic" name="topic">
+    <option>Консультация</option>
+    <option>занятие</option>
+    <option>Вопрос по программе</option>
+  </select>
+
+  <label for="event-datetime">Выберите дату и время:</label>
+  <input type="datetime-local" id="event-datetime" name="event-datetime">
+
+  <label for="message">Сообщение *</label>
+  <textarea id="message" name="message" required></textarea>
+
+  <button type="submit">Отправить сообщение</button>
+</form>
+{{end}}
