@@ -1,0 +1,21 @@
+{{ define "content" }}
+<h2>Вход в админку</h2>
+
+{{ if . }}
+<p style="color:red">{{ . }}</p>
+{{ end }}
+
+<form method="post" action="/login">
+    <div>
+        <label>Логин:</label>
+        <input type="text" name="username" required>
+    </div>
+    <div>
+        <label>Пароль:</label>
+        <input type="password" name="password" required>
+    </div>
+    <div>
+        <button type="submit">Войти</button>
+    </div>
+</form>
+{{ end }}

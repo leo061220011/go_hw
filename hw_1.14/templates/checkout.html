@@ -3,32 +3,40 @@
 {{define "content"}}
 <h2>Запись на занятие</h2>
 
-{{if .Success}}
-  <p style="color: green; font-weight: bold;">Заявка успешно отправлена!</p>
-{{end}}
+{{ if .Error }}
+<div style="color: red; margin-bottom: 10px;">
+  {{ .Error }}
+</div>
+{{ end }}
+
+{{ if .Success }}
+<div style="color: green; margin-bottom: 10px;">
+  Заявка успешно отправлена!
+</div>
+{{ end }}
 
 <form action="/checkout" method="POST">
   <label for="name">Ваше имя *</label>
-  <input type="text" id="name" name="name" required>
+  <input type="text" id="name" name="name" value="{{.Name}}" required>
 
   <label for="email">Email *</label>
-  <input type="email" id="email" name="email" required>
+  <input type="email" id="email" name="email" value="{{.Email}}" required>
 
   <label for="phone">Телефон</label>
-  <input type="tel" id="phone" name="phone">
+  <input type="tel" id="phone" name="phone" value="{{.Phone}}">
 
   <label for="topic">Тема сообщения</label>
   <select id="topic" name="topic">
-    <option>Консультация</option>
-    <option>занятие</option>
-    <option>Вопрос по программе</option>
+    <option {{if eq .Topic "Консультация"}}selected{{end}}>Консультация</option>
+    <option {{if eq .Topic "занятие"}}selected{{end}}>занятие</option>
+    <option {{if eq .Topic "Вопрос по программе"}}selected{{end}}>Вопрос по программе</option>
   </select>
 
   <label for="event-datetime">Выберите дату и время:</label>
-  <input type="datetime-local" id="event-datetime" name="event-datetime">
+  <input type="datetime-local" id="event-datetime" name="event-datetime" value="{{.DateTime}}">
 
   <label for="message">Сообщение *</label>
-  <textarea id="message" name="message" required></textarea>
+  <textarea id="message" name="message" required>{{.Message}}</textarea>
 
   <button type="submit">Отправить сообщение</button>
 </form>
